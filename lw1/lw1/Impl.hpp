@@ -15,16 +15,6 @@ size_t Swap(size_t n)
 	return static_cast<size_t>(stoull(str));
 }
 
-void PrintImpl(const vector<pair<size_t, size_t>>& st)
-{
-	string strSt;
-	for (const auto & [value, parent] : st)
-	{
-		strSt += to_string(value) + " ";
-	}
-	cerr << " >> " << strSt << endl;
-}
-
 bool IsContains(const set<size_t>& container, size_t value)
 {
 	return find(container.cbegin(), container.cend(), value) != container.cend();
@@ -83,7 +73,6 @@ vector<list<size_t>> F(size_t num, size_t max)
 				tmpProcessed.emplace(future);
 			}
 		}
-		// PrintImpl(tmp);
 		swap(l, tmp);
 		history.push_back(l);
 

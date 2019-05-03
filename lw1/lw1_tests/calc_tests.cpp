@@ -2,7 +2,7 @@
 
 #include "../lw1/Impl.hpp"
 
-BOOST_AUTO_TEST_SUITE(BlaBlaBla_)
+BOOST_AUTO_TEST_SUITE(Calc_)
 
 BOOST_AUTO_TEST_CASE(Swap_)
 {
