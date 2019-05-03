@@ -3,8 +3,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <queue>
-#include <stack>
 #include <list>
 #include <set>
 
@@ -17,41 +15,93 @@ size_t Swap(size_t n)
 	return static_cast<size_t>(stoull(str));
 }
 
-list<size_t> ToList(const deque<size_t>& st)
+void PrintImpl(const vector<pair<size_t, size_t>>& st)
 {
-	return { st.begin(), st.end() };
+	string strSt;
+	for (const auto & [value, parent] : st)
+	{
+		strSt += to_string(value) + " ";
+	}
+	cerr << " >> " << strSt << endl;
 }
 
-void F(size_t n, size_t num, size_t max, size_t last, deque<size_t> & st, set<size_t> & processed, vector<deque<size_t>> & results)
+bool IsContains(const set<size_t>& container, size_t value)
 {
-	if ((n > max) || (processed.find(n) != processed.end()))
-	// if ((n > max) || find(st.begin(), st.end(), n) != st.end())
+	return find(container.cbegin(), container.cend(), value) != container.cend();
+}
+
+bool IsContains(const vector<pair<size_t, size_t>>& container, size_t value)
+{
+	return find_if(container.cbegin(), container.cend(), [value](const auto & bla) {
+		return bla.first == value;
+	}) != container.cend();
+}
+
+size_t GetParentId(const vector<pair<size_t, size_t>>& container, size_t value)
+{
+	const auto it = find_if(container.cbegin(), container.cend(), [value](const auto & bla) {
+		return bla.first == value;
+	});
+	return it->second;
+}
+
+vector<list<size_t>> F(size_t num, size_t max)
+{
+	vector<list<size_t>> results;
+	if (num == 1)
 	{
-		return;
+		results.emplace_back(1, 1);
+		return results;
 	}
-	processed.emplace_hint(processed.end(), n);
-	st.push_back(n);
 
-	if (n == num)
+	vector<pair<size_t, size_t>> l = { {1, 0} };
+	vector<vector<pair<size_t, size_t>>> history = { l };
+	set<size_t> processed = { 1 };
+
+	set<size_t> tmpProcessed;
+	while (!l.empty())
 	{
-		results.push_back(st);
-		return;
+		processed.insert(tmpProcessed.begin(), tmpProcessed.end());
+		vector<pair<size_t, size_t>> tmp;
+		for (size_t i = 0; i < l.size(); ++i)
+		{
+			const auto [value, count] = l[i];
+
+			if (const auto future = static_cast<size_t>(stoull(to_string(value) + "1")); (future <= max) && !IsContains(processed, future))
+			{
+				tmp.emplace_back(future, i);
+				tmpProcessed.emplace(future);
+			}
+			if (const auto future = 2 * value; (future <= max) && !IsContains(processed, future))
+			{
+				tmp.emplace_back(future, i);
+				tmpProcessed.emplace(future);
+			}
+			if (const auto future = Swap(value); (future <= max) && !IsContains(processed, future))
+			{
+				tmp.emplace_back(future, i);
+				tmpProcessed.emplace(future);
+			}
+		}
+		// PrintImpl(tmp);
+		swap(l, tmp);
+		history.push_back(l);
+
+		if (IsContains(l, num))
+		{
+			size_t value = num;
+			list<size_t> res = { value };
+			for (size_t i = history.size() - 1; i >= 1; --i)
+			{
+				const auto parentId = GetParentId(history[i], value);
+				const auto parent = history[i - 1][parentId];
+				res.push_front(parent.first);
+				value = parent.first;
+			}
+			results.push_back(res);
+		}
 	}
-
-	if (true)
-	{
-		cerr << " >> " << last << " -> " << n <<  " <<" << endl;
-		cerr << static_cast<size_t>(stoull(to_string(n) + "1")) << endl;
-		cerr << 2 * n << endl;
-		cerr << Swap(n) << endl;
-		cerr << endl;
-	}
-
-	F(static_cast<size_t>(stoull(to_string(n) + "1")), num, max, n, st, processed, results);
-	F(2 * n, num, max, n, st, processed, results);
-	F(Swap(n), num, max, n, st, processed, results);
-
-	st.pop_back();
+	return results;
 }
 
 optional<list<size_t>> Check(size_t num, size_t max)
@@ -61,17 +111,13 @@ optional<list<size_t>> Check(size_t num, size_t max)
 		return nullopt;
 	}
 
-	set<size_t> processed;
-	deque<size_t> st;
-	vector<deque<size_t>> results;
-	F(1, num, max, 1, st, processed, results);
-
+	vector<list<size_t>> results = F(num, max);
 	sort(results.begin(), results.end(), [](const auto & lhs, const auto & rhs) {
 		return lhs.size() < rhs.size();
 	});
 	return results.empty()
 		? nullopt
-		: make_optional(ToList(results.front()));
+		: make_optional(results.front());
 }
 
 void Print(const optional<list<size_t>>& result)

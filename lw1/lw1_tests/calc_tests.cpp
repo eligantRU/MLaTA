@@ -24,6 +24,16 @@ BOOST_AUTO_TEST_CASE(Check_)
 		BOOST_CHECK(isEqual);
 	}
 	{
+		const auto bla = Check(1, 10);
+		const auto isEqual = *bla == list<size_t>{1};
+		BOOST_CHECK(isEqual);
+	}
+	{
+		const auto bla = Check(2, 10);
+		const auto isEqual = *bla == list<size_t>{1, 2};
+		BOOST_CHECK(isEqual);
+	}
+	{
 		const auto bla = Check(1221, 1500);
 		const auto isEqual = *bla == list<size_t>{1, 11, 22, 221, 122, 1221};
 		BOOST_CHECK(isEqual);
@@ -34,9 +44,11 @@ BOOST_AUTO_TEST_CASE(Check_)
 		BOOST_CHECK(isEqual);
 	}
 	{
-		//const auto bla = Check(22411, 23000);
-		//const auto isEqual = *bla == list<size_t>{1, 2, 21, 211, 422, 224, 2241, 22411};
-		//BOOST_CHECK(isEqual);
+#ifdef NDEBUG
+		const auto bla = Check(22411, 23000);
+		const auto isEqual = *bla == list<size_t>{1, 2, 21, 211, 422, 224, 2241, 22411};
+		BOOST_CHECK(isEqual);
+#endif
 	}
 }
 
