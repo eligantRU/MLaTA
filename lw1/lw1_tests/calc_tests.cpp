@@ -50,6 +50,12 @@ BOOST_AUTO_TEST_CASE(Check_)
 		BOOST_CHECK(isEqual);
 #endif
 	}
+
+	{
+#ifdef NDEBUG
+		BOOST_CHECK(Check(50000, 50000));
+#endif
+	}
 }
 
 BOOST_AUTO_TEST_SUITE_END()
