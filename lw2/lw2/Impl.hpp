@@ -54,9 +54,9 @@ size_t GetIntersectionCount(int n, int w, int e)
 
 	vector<pair<Vec2, Vec2>> squares;
 	squares.reserve(n * n);
-	for (int i = 0; i < n; ++i)
+	for (int i = 1; i <= n; ++i)
 	{
-		for (int j = 0; j < n; ++j)
+		for (int j = 1; j <= n; ++j)
 		{
 			squares.push_back({ { 100 * i, 100 * j }, { 100 * i - squareSide, 100 * j - squareSide } });
 		}
