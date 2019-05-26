@@ -60,7 +60,7 @@ pair<vector<optional<int>>, vector<list<size_t>>> GetLongestPathsWithDistances(c
 		{
 			for (const auto v : edges[u])
 			{
-				if (*longestDistances[v.first] > * longestDistances[u] - v.second)
+				if (*longestDistances[v.first] > *longestDistances[u] - v.second)
 				{
 					parent[v.first] = u;
 				}
