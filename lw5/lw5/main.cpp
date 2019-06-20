@@ -25,7 +25,7 @@ auto MeasureTime(T&& fn)
 
 int main()
 {
-	auto t = MeasureTime([=] {
+	const auto t = MeasureTime([=] {
 		size_t pillarsCount, commandsCount;
 		cin >> pillarsCount >> commandsCount;
 
@@ -38,7 +38,7 @@ int main()
 			{
 				int val;
 				cin >> val;
-				tree.Add(leftPillar, rightPillar - 1, val);
+				tree.Add(leftPillar - 1, rightPillar - 1, val);
 			}
 			else if (commandType == 2)
 			{
