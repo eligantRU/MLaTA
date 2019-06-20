@@ -22,6 +22,8 @@ public:
 
 	T Sum(size_t left, size_t right) const
 	{
+		//return SumImpl(1, 0, m_size, left + m_crutch, right + m_crutch);
+
 		T result = 0;
 		for (size_t pos = left + m_crutch; pos < right + m_crutch; ++pos)
 		{
@@ -77,6 +79,19 @@ private:
 			AddImpl(2 * v + 1, middle + 1, right, max(l, middle + 1), r, addValue);
 		}
 	}
+
+	/*T SumImpl(size_t v, size_t left, size_t right, size_t l, size_t r) const
+	{
+		if (begin > end)
+			return 0;
+		if (begin == leftLimit && end == rightLimit)
+			return m_tree[i];
+
+		int half = (leftLimit + rightLimit) / 2;
+		int diff = m_treeDiffs[i] * (end - begin + 1);
+		return Sum(i * 2, begin, std::min(end, half), leftLimit, half) +
+			Sum(i * 2 + 1, std::max(begin, half + 1), end, half + 1, rightLimit) + diff;
+	}*/
 
 	T Get(size_t v, size_t left, size_t right, size_t pos) const
 	{
