@@ -10,6 +10,7 @@
 Егоров Никита, ПС-21
 */
 
+#include <fstream>
 #include <chrono>
 
 #include "Impl.hpp"
@@ -25,24 +26,27 @@ auto MeasureTime(T&& fn)
 
 int main()
 {
-	const auto t = MeasureTime([=] {
+	ifstream input("input.txt");
+	ofstream output("output.txt");
+
+	const auto t = MeasureTime([&] {
 		size_t pillarsCount, commandsCount;
-		cin >> pillarsCount >> commandsCount;
+		input >> pillarsCount >> commandsCount;
 
 		SegmentTree<int64_t> tree(vector<int64_t>(pillarsCount - 1, 0));
 		for (size_t i = 0; i < commandsCount; ++i)
 		{
 			size_t commandType, leftPillar, rightPillar;
-			cin >> commandType >> leftPillar >> rightPillar;
+			input >> commandType >> leftPillar >> rightPillar;
 			if (commandType == 1)
 			{
 				int val;
-				cin >> val;
+				input >> val;
 				tree.Add(leftPillar - 1, rightPillar - 1, val);
 			}
 			else if (commandType == 2)
 			{
-				cout << tree.Sum(leftPillar - 1, rightPillar - 1) << endl;
+				output << tree.Sum(leftPillar - 1, rightPillar - 1) << endl;
 			}
 		}
 	});
